@@ -1,9 +1,6 @@
 package com.example.test_module4.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class City {
@@ -11,32 +8,34 @@ public class City {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String country;
     private int area;
     private int population;
     private int gdp;
     private String description;
+    @ManyToOne
+    @JoinColumn(name = "countryId")
+    private Country country;
 
     public City() {
     }
 
-    public City(Long id, String name, String country, int area, int population, int gdp, String description) {
+    public City(Long id, String name, int area, int population, int gdp, String description, Country country) {
         this.id = id;
         this.name = name;
-        this.country = country;
         this.area = area;
         this.population = population;
         this.gdp = gdp;
         this.description = description;
+        this.country = country;
     }
 
-    public City(String name, String country, int area, int population, int gdp, String description) {
+    public City(String name, int area, int population, int gdp, String description, Country country) {
         this.name = name;
-        this.country = country;
         this.area = area;
         this.population = population;
         this.gdp = gdp;
         this.description = description;
+        this.country = country;
     }
 
     public Long getId() {
@@ -53,14 +52,6 @@ public class City {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
     }
 
     public int getArea() {
@@ -93,5 +84,13 @@ public class City {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Country getCountry() {
+        return country;
+    }
+
+    public void setCountry(Country country) {
+        this.country = country;
     }
 }
