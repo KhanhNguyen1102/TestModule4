@@ -1,26 +1,28 @@
-function getAllCountry(){
+function getAllCountry() {
     $.ajax({
         type: "GET",
         url: "http://localhost:8080/api/countries",
-        success: function (data){
+        success: function (data) {
             console.log(data)
-            displayCategories(data);
+
         }
     })
 }
-function getAllCities(){
+
+function getAllCities() {
     $.ajax({
         type: "GET",
         url: "http://localhost:8080/api/cities",
-        success: function (data){
+        success: function (data) {
             console.log(data)
             displayList(data);
         }
     })
 }
-function displayList(array){
-    let res="";
-    res+= `     <table style="" class="table">
+
+function displayList(array) {
+    let res = "";
+    res += `     <table style="" class="table">
                 <thead class="thead-dark">
                 <tr>
                     <th style="text-align: center" colspan="4" scope="col">Danh sách thành phố</th>
@@ -39,27 +41,28 @@ function displayList(array){
                     <td>Quốc gia</td>
                     <td>Hành động</td>
                 </tr>`
-    for (let i = 0 ; i< array.length;i++){
+    for (let i = 0; i < array.length; i++) {
         res += `<tr>
-                    <th scope="row">${i+1}</th>
+                    <th scope="row">${i + 1}</th>
                     <td><span onclick="showDetail(${array[i].id})">${array[i].name}</span></td>
                     <td>${array[i].country.name}</td>
                     <td><span>Chỉnh sửa</span>| <span>Xóa</span></td>
-                </tr>` ;
+                </tr>`;
     }
-                res+=`</tbody>
+    res += `</tbody>
             </table>`
 
-    document.getElementById("content").innerHTML=res;
+    document.getElementById("content").innerHTML = res;
 }
-function showDetail(id){
+
+function showDetail(id) {
     $.ajax({
         type: "GET",
-        url: "http://localhost:8080/api/cities/search?id=" +id,
-        success: function (data){
+        url: "http://localhost:8080/api/cities/search?id=" + id,
+        success: function (data) {
             console.log(data)
-            let res="";
-            res+= `     <table style="" class="table">
+            let res = "";
+            res += `     <table style="" class="table">
                 <thead class="thead-dark">
                 <tr>
                     <th style="text-align: center" colspan="4" scope="col">Thành phố ${data.name}</th>
@@ -94,24 +97,22 @@ function showDetail(id){
                  <tr>
                     <th style="text-align: right" colspan="4" scope="row"><button>Chỉnh sửa</button>&ensp;&ensp;<button>Xóa</button></th>
                 </tr>`
-            res+=`</tbody>
+            res += `</tbody>
             </table>`
 
-            document.getElementById("content").innerHTML=res;
+            document.getElementById("content").innerHTML = res;
         }
     })
 }
-function showFormCreate(){
+
+function showFormCreate() {
     $.ajax({
         type: "GET",
         url: "http://localhost:8080/api/countries",
-        success: function (data){
+        success: function (data) {
             console.log(data)
-            displayCategories(data);
-        }
-    })
-    let res="";
-    res+= `     <table style="" class="table">
+            let res = "";
+            res += `     <table style="" class="table">
                 <thead class="thead-dark">
                 <tr>
                     <th style="text-align: center" colspan="4" scope="col">Thêm thành phố</th>
@@ -127,7 +128,13 @@ function showFormCreate(){
                 </tr>
                 <tr>
                     <th scope="row">Quốc gia :</th>
-                    <th colspan="3" scope="row"><input type="text"></th>
+                    <th colspan="3" scope="row">
+                    <select id="country">`
+            for (let i = 0; i < data.length; i++) {
+                res+=`<option value="${data[i].id}">${data[i].name}</option>`
+            }
+            res += `</select>
+</th>
                 </tr>
                 <tr>
                     <th scope="row">Diện tích :</th>
@@ -145,16 +152,12 @@ function showFormCreate(){
                     <th scope="row">Giới thiệu :</th>
                     <th colspan="3" scope="row"><input type="text"></th>
                 </tr>`
-    // for (let i = 0 ; i< array.length;i++){
-    //     res += `<tr>
-    //                 <th scope="row">${i+1}</th>
-    //                 <td><span onclick="showDetail(${array[i].id})">${array[i].name}</span></td>
-    //                 <td>${array[i].country}</td>
-    //                 <td><span>Chỉnh sửa</span>| <span>Xóa</span></td>
-    //             </tr>` ;
-    // }
-    res+=`</tbody>
+
+            res += `</tbody>
             </table>`
 
-    document.getElementById("content").innerHTML=res;
+            document.getElementById("content").innerHTML = res;
+        }
+    })
+
 }
