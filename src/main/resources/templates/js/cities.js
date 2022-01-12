@@ -1,3 +1,13 @@
+function getAllCountry(){
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8080/api/countries",
+        success: function (data){
+            console.log(data)
+            displayCategories(data);
+        }
+    })
+}
 function getAllCities(){
     $.ajax({
         type: "GET",
@@ -33,7 +43,7 @@ function displayList(array){
         res += `<tr>
                     <th scope="row">${i+1}</th>
                     <td><span onclick="showDetail(${array[i].id})">${array[i].name}</span></td>
-                    <td>${array[i].country}</td>
+                    <td>${array[i].country.name}</td>
                     <td><span>Chỉnh sửa</span>| <span>Xóa</span></td>
                 </tr>` ;
     }
@@ -64,7 +74,7 @@ function showDetail(id){
                     <th colspan="4" scope="row">Tên : ${data.name} </th>
                 </tr>
                 <tr>
-                    <th colspan="4" scope="row">Quốc gia : ${data.country} </th>
+                    <th colspan="4" scope="row">Quốc gia : ${data.country.name} </th>
                 </tr>
                 <tr>
                     <th colspan="4" scope="row">Diện tích : ${data.area} km2 </th>
@@ -73,7 +83,7 @@ function showDetail(id){
                     <th colspan="4" scope="row">Dân số : ${data.population} người </th>
                 </tr>
                 <tr>
-                    <th colspan="4" scope="row">GDP : ${data.name} ngàn $ </th>
+                    <th colspan="4" scope="row">GDP : ${data.gdp} ngàn $ </th>
                 </tr>
                 <tr>
                     <th colspan="4" scope="row">Giới thiệu: </th>
@@ -92,6 +102,14 @@ function showDetail(id){
     })
 }
 function showFormCreate(){
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8080/api/countries",
+        success: function (data){
+            console.log(data)
+            displayCategories(data);
+        }
+    })
     let res="";
     res+= `     <table style="" class="table">
                 <thead class="thead-dark">
