@@ -24,8 +24,8 @@ public class CityRestController {
         }
         return new ResponseEntity<>(cities, HttpStatus.OK);
     }
-    @GetMapping("/{id}")
-    public ResponseEntity<City> findCityById(@PathVariable Long id) {
+    @GetMapping("/search")
+    public ResponseEntity<City> findCityById(@RequestParam Long id) {
         Optional<City> cityOptional = cityService.findById(id);
         if (!cityOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
