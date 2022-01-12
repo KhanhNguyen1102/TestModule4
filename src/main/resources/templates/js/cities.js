@@ -46,7 +46,7 @@ function displayList(array) {
                     <th scope="row">${i + 1}</th>
                     <td><span onclick="showDetail(${array[i].id})">${array[i].name}</span></td>
                     <td>${array[i].country.name}</td>
-                    <td><span>Chỉnh sửa</span>| <span onclick="deleteCity(${array[i].id})">Xóa</span></td>
+                    <td><span onclick="showFormUpdate(${array[i].id})">Chỉnh sửa</span>| <span onclick="deleteCity(${array[i].id})">Xóa</span></td>
                 </tr>`;
     }
     res += `</tbody>
@@ -95,7 +95,7 @@ function showDetail(id) {
                     <th colspan="4" scope="row">${data.description} </th>
                 </tr>
                  <tr>
-                    <th style="text-align: right" colspan="4" scope="row"><button>Chỉnh sửa</button>&ensp;&ensp;<button>Xóa</button></th>
+                    <th style="text-align: right" colspan="4" scope="row"><button onclick="showFormUpdate(${data.id})">Chỉnh sửa</button>&ensp;&ensp;<button onclick="deleteCity(${data.id})">Xóa</button></th>
                 </tr>`
             res += `</tbody>
             </table>`
@@ -201,6 +201,16 @@ function deleteCity(id){
     $.ajax({
         type: "DELETE",
         url: "http://localhost:8080/api/cities/" + id,
+        success: getAllCities,
+        error: function (error){
+            console.log(error)
+        }
+    })
+}
+function showFormUpdate(id){
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8080/api/cities/search?id=" + id,
         success: getAllCities,
         error: function (error){
             console.log(error)
