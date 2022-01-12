@@ -211,6 +211,100 @@ function showFormUpdate(id){
     $.ajax({
         type: "GET",
         url: "http://localhost:8080/api/cities/search?id=" + id,
+        success: function (data) {
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/api/countries",
+                success: function (countries) {
+                    console.log(countries)
+                    let res = "";
+                    res += `     <table style="" class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th style="text-align: center" colspan="4" scope="col">Cập nhật thành phố</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th colspan="4" scope="row">CẬP NHẬT THÀNH PHỐ</th>
+                </tr>
+               <tr>
+                    <th scope="row">Tên :</th>
+                    <th colspan="3" scope="row"><input id="name" type="text" value="${data.name}"></th>
+                </tr>
+                <tr>
+                    <th scope="row">Quốc gia :</th>
+                    <th colspan="3" scope="row">
+                    <select id="country">`
+                    for (let i = 0; i < countries.length; i++) {
+                        res+=`<option value="${countries[i].id}">${countries[i].name}</option>`
+                    }
+                    res += `</select>
+</th>
+                </tr>
+                <tr>
+                    <th scope="row">Diện tích :</th>
+                    <th colspan="3" scope="row"><input id="area" type="number" value="${data.area}"></th>
+                </tr>
+                <tr>
+                    <th scope="row">Dân số :</th>
+                    <th colspan="3" scope="row"><input id="population" type="number" value="${data.population}"></th>
+                </tr>
+                <tr>
+                   <th scope="row">GDP :</th>
+                    <th colspan="3" scope="row"><input id="gdp" type="number" value="${data.gdp}"></th>
+                </tr>
+                <tr>
+                    <th scope="row">Giới thiệu :</th>
+                    <th colspan="3" scope="row"><input id="description" type="text" value="${data.description}"></th>
+                </tr>
+                <tr>
+                    <th scope="row"></th>
+                    <th colspan="3" scope="row"><input id="idCity" type="hidden" value="${data.id}"></th>
+                </tr>
+                <tr>
+                    <th scope="row">&ensp;</th>
+                    <th style="text-align: left" colspan="2" scope="row"><button onclick="updateCity()">Cập nhật</button>&ensp;&ensp;<button onclick="getAllCities()">Thoát</button></th>
+                    <th scope="row">&ensp;</th>
+                </tr>`
+
+                    res += `</tbody>
+            </table>`
+
+                    document.getElementById("content").innerHTML = res;
+                }
+            })
+
+
+        }
+    })
+}
+function updateCity(){
+    let id = document.getElementById("idCity").value;
+    let area = document.getElementById("area").value;
+    let description = document.getElementById("description").value;
+    let gdp = document.getElementById("gdp").value;
+    let name = document.getElementById("name").value;
+    let population = document.getElementById("population").value;
+    let countryId = document.getElementById("country").value;
+    let city = {
+        name : name,
+        area : area,
+        description : description,
+        gdp : gdp,
+        population : population,
+        country :{
+            id : countryId
+        }
+    }
+    $.ajax({
+        headers:{
+            'Accept':'application/json',
+            'Content-Type':'application/json',
+        },
+        type: 'PUT',
+        url: 'http://localhost:8080/api/cities/' + id,
+        data :JSON.stringify(city),
         success: getAllCities,
         error: function (error){
             console.log(error)
