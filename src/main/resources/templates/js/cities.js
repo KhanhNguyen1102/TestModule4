@@ -46,7 +46,7 @@ function displayList(array) {
                     <th scope="row">${i + 1}</th>
                     <td><span onclick="showDetail(${array[i].id})">${array[i].name}</span></td>
                     <td>${array[i].country.name}</td>
-                    <td><span>Chỉnh sửa</span>| <span>Xóa</span></td>
+                    <td><span>Chỉnh sửa</span>| <span onclick="deleteCity(${array[i].id})">Xóa</span></td>
                 </tr>`;
     }
     res += `</tbody>
@@ -124,7 +124,7 @@ function showFormCreate() {
                 </tr>
                <tr>
                     <th scope="row">Tên :</th>
-                    <th colspan="3" scope="row"><input type="text"></th>
+                    <th colspan="3" scope="row"><input id="name" type="text"></th>
                 </tr>
                 <tr>
                     <th scope="row">Quốc gia :</th>
@@ -138,19 +138,24 @@ function showFormCreate() {
                 </tr>
                 <tr>
                     <th scope="row">Diện tích :</th>
-                    <th colspan="3" scope="row"><input type="number"></th>
+                    <th colspan="3" scope="row"><input id="area" type="number"></th>
                 </tr>
                 <tr>
                     <th scope="row">Dân số :</th>
-                    <th colspan="3" scope="row"><input type="number"></th>
+                    <th colspan="3" scope="row"><input id="population" type="number"></th>
                 </tr>
                 <tr>
                    <th scope="row">GDP :</th>
-                    <th colspan="3" scope="row"><input type="number"></th>
+                    <th colspan="3" scope="row"><input id="gdp" type="number"></th>
                 </tr>
                 <tr>
                     <th scope="row">Giới thiệu :</th>
-                    <th colspan="3" scope="row"><input type="text"></th>
+                    <th colspan="3" scope="row"><input id="description" type="text"></th>
+                </tr>
+                <tr>
+                    <th scope="row">&ensp;</th>
+                    <th style="text-align: left" colspan="2" scope="row"><button onclick="saveCity()">Thêm</button>&ensp;&ensp;<button onclick="getAllCities()">Thoát</button></th>
+                    <th scope="row">&ensp;</th>
                 </tr>`
 
             res += `</tbody>
@@ -160,4 +165,45 @@ function showFormCreate() {
         }
     })
 
+}
+function saveCity(){
+    let area = document.getElementById("area").value;
+    let description = document.getElementById("description").value;
+    let gdp = document.getElementById("gdp").value;
+    let name = document.getElementById("name").value;
+    let population = document.getElementById("population").value;
+    let countryId = document.getElementById("country").value;
+    let city = {
+        name : name,
+        area : area,
+        description : description,
+        gdp : gdp,
+        population : population,
+        country :{
+            id : countryId
+        }
+    }
+    $.ajax({
+        headers:{
+            'Accept':'application/json',
+            'Content-Type':'application/json',
+        },
+        type: 'POST',
+        url: 'http://localhost:8080/api/cities',
+        data :JSON.stringify(city),
+        success: getAllCities,
+        error: function (error){
+            console.log(error)
+        }
+    })
+}
+function deleteCity(id){
+    $.ajax({
+        type: "DELETE",
+        url: "http://localhost:8080/api/cities/" + id,
+        success: getAllCities,
+        error: function (error){
+            console.log(error)
+        }
+    })
 }
